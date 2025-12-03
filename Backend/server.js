@@ -34,8 +34,16 @@ connectDB();
 const app = express();
 
 // CORS configuration
-app.use(cors({
+/*app.use(cors({
   origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));*/
+app.use(cors({
+  origin: [
+    "http://localhost:5173", // Local development
+    "https://oreratilesranwa-blog-project-5l37vo1xp-sanjixoxos-projects.vercel.app" // Production frontend
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
