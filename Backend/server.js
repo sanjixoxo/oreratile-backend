@@ -109,7 +109,7 @@ connectDB();
 
 const app = express();
 
-// ✅ FIXED CORS - removed trailing slashes
+// FIXED CORS - removed trailing slashes
 app.use(cors({
   origin: [
     "http://localhost:5173",
