@@ -42,7 +42,8 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173", // Local development
-    "https://oranwashez.vercel.app/" // Production frontend
+    "https://oranwashez.vercel.app/",
+    "https://oranwashey.vercel.app/" // Production frontend
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
