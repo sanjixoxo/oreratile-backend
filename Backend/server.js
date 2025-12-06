@@ -1,4 +1,4 @@
-import express from 'express';
+/*import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
@@ -38,7 +38,7 @@ const app = express();
   origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
-}));*/
+}));
 app.use(cors({
   origin: [
     "http://localhost:5173", // Local development
@@ -72,8 +72,9 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📁 Uploads directory: ${uploadsDir}`);
   console.log(`🌐 Frontend URL: http://localhost:5173`);
-});
-/*import express from 'express';
+});*/
+
+import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
@@ -89,7 +90,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load environment variables
-dotenv.config({ path: './Utilities/.env' });
+dotenv.config({ path: path.join(__dirname, 'Utilities', '.env') });
+
+// 🔍 DEBUG: Check if environment variables are loaded
+console.log("📍 .env path:", path.join(__dirname, 'Utilities', '.env'));
+console.log("MONGO_URI loaded:", process.env.MONGO_URI ? "✅ YES" : "❌ NO");
+console.log("JWT_SECRET loaded:", process.env.JWT_SECRET ? "✅ YES" : "❌ NO");
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -103,9 +109,13 @@ connectDB();
 
 const app = express();
 
-// CORS configuration
+// ✅ FIXED CORS - removed trailing slashes
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: [
+    "http://localhost:5173",
+    "https://oranwashez.vercel.app",
+    "https://oranwashey.vercel.app"
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -114,7 +124,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve uploaded files statically (CRITICAL FIX!)
+// Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API routes
@@ -122,17 +132,30 @@ app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 
+// Root route for testing
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Blog API Server',
+    status: 'running',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      posts: '/api/posts',
+      users: '/api/users'
+    }
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
-// Start server
+// Start server - bind to 0.0.0.0 for Render
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📁 Uploads directory: ${uploadsDir}`);
-  console.log(`🌐 Frontend URL: http://localhost:5173`);
-});*/
-
+  console.log(`🌐 CORS enabled for: http://localhost:5173, Vercel deployments`);
+});
 
